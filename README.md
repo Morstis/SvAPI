@@ -46,12 +46,12 @@ e.g.
     });
 ```
 
-    outcomment in index.ts:
-```//start server http
+4. outcomment in index.ts:
+ ```//start server http
     // app.listen(3000, () => {
     //     console.log("Server started on port 3000!");
     // });
-```
+ ```
 4. Run `npm start` command
 
 ## Deployment
