@@ -50,7 +50,7 @@ e.g.
     // });`
 4. Run `npm start` command
 
-##Deployment
+## Deployment
 
 1. install pm2: `npm install pm2`
 2. add your key and cert in index.ts and comment `options` out
