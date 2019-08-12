@@ -7,7 +7,7 @@ Steps to run this project:
 1. Run `npm i` command
 2. Setup database settings inside `ormconfig.json` file
 e.g.
-```{
+`{
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
@@ -30,9 +30,9 @@ e.g.
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
    }
-}```
+}`
 3. comment in index.ts:
-    ```const options = {
+    `const options = {
       key: readFileSync("/etc/letsencrypt/live/api.sv-hag.de/privkey.pem"),
       cert: readFileSync("/etc/letsencrypt/live/api.sv-hag.de/fullchain.pem")
     };
@@ -41,7 +41,7 @@ e.g.
       console.log(
         "server started with cors at https://localhost:3000 or with the reverse proxy at https://api.sv-hag.de"
       );
-    });```
+    });`
 
     outcomment in index.ts:
     ```//start server http
