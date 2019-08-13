@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { getRepository, FindManyOptions } from "typeorm";
 import { validate } from "class-validator";
-
+import * as nodeMailer from "nodemailer";
 import { User } from "../entity/User";
+import config from "../config/config";
 
 class UserController {
   static defaultResponse: FindManyOptions<User> = {
@@ -45,6 +46,24 @@ class UserController {
     user.password = password;
     user.uid = uid;
     user.role = "Schüler";
+    user.uid = createUID();
+    user.verified = false;
+
+    function createUID() {
+      let dt = new Date().getTime();
+      const uuid: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        c => {
+          // tslint:disable-next-line: no-bitwise
+          const r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+
+          // tslint:disable-next-line: no-bitwise
+          return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+      return uuid;
+    }
 
     //Validade if the parameters are ok
     const errors = await validate(user);
@@ -65,8 +84,32 @@ class UserController {
       return;
     }
 
-    //If all ok, send 201 response
-    res.status(201).send({ res: true });
+    //send email
+    let transporter = nodeMailer.createTransport({
+      host: "hag-iserv.de",
+      port: 25,
+      auth: {
+        // should be replaced with real sender's account
+        user: "l.wiese",
+        pass: "Morstis_nex"
+      }
+    });
+
+    let mailOptions = {
+      // should be replaced with real recipient's account
+      from: "Sv-Website <sv@hag-iserv.de>",
+      to: "lucas.wiese@gmx.de",
+      subject: "Verifiziere deine Email",
+      html: config.mail(user)
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log("Mail error " + error);
+      }
+      console.log("Message %s sent: %s", info.messageId, info.response);
+      //If all ok, send 201 response
+      res.status(201).send({ res: true });
+    });
   };
 
   static editUser = async (req: Request, res: Response) => {

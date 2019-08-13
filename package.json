@@ -13,6 +13,7 @@
     "@types/cors": "^2.8.5",
     "@types/helmet": "0.0.43",
     "@types/jsonwebtoken": "^8.3.3",
+    "@types/nodemailer": "^6.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.1",
     "class-validator": "^0.10.0",
@@ -21,6 +22,7 @@
     "helmet": "^3.20.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.14.1",
+    "nodemailer": "^6.3.0",
     "reflect-metadata": "^0.1.10",
     "ts-node-dev": "^1.0.0-pre.40",
     "typeorm": "0.2.18"
@@ -28,6 +30,7 @@
   "scripts": {
     "tsc": "tsc",
     "start": "ts-node src/index.ts",
-    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "dev": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts"
   }
 }

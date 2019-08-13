@@ -44,6 +44,9 @@ export class User {
   role: string;
 
   @Column()
+  verified: boolean;
+
+  @Column()
   @CreateDateColumn()
   createdAt: Date;
 
