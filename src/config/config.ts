@@ -39,10 +39,10 @@ export default {
               <h1>Danke f&uuml;r die Registrierung.</h1>
                   <br>
               <p>Bitte klicke auf den Link unten, um dich zu verifizieren.</p> <br><br> 
-              <a href="https://api.sv-hag.de?uid=` +
+              <a href="https://www.sv-hag.de/verify?uid=` +
       verificationInfo.uid +
-      `&email=` +
-      verificationInfo.email +
+      `&id=` +
+      verificationInfo.id +
       `">Verifizieren</a>
           </body>
       </html>`

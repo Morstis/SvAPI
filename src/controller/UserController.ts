@@ -7,7 +7,16 @@ import config from "../config/config";
 
 class UserController {
   static defaultResponse: FindManyOptions<User> = {
-    select: ["id", "firstName", "name", "klasse", "email", "role"] //We dont want to send the passwords on response
+    select: [
+      "id",
+      "firstName",
+      "name",
+      "klasse",
+      "email",
+      "role",
+      "uid",
+      "verified"
+    ] //We dont want to send the passwords on response
   };
 
   static listAll = async (req: Request, res: Response) => {
@@ -98,12 +107,13 @@ class UserController {
     let mailOptions = {
       // should be replaced with real recipient's account
       from: "Sv-Website <sv@hag-iserv.de>",
-      to: "lucas.wiese@gmx.de",
+      to: user.email,
       subject: "Verifiziere deine Email",
       html: config.mail(user)
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
+        res.send({ res: false, error: "email isn't existing" });
         return console.log("Mail error " + error);
       }
       console.log("Message %s sent: %s", info.messageId, info.response);
