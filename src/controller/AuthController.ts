@@ -64,13 +64,15 @@ class AuthController {
         firstName: user.firstName,
         name: user.name,
         class: user.klasse,
-        email: user.email
+        email: user.email,
+        role: user.role
       },
       config.jwtSecret,
       { expiresIn: "1h" }
     );
 
     //Send the jwt in the response
+    res.setHeader("auth", token);
     res.send({ res: true, token: token });
   };
 

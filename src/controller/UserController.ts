@@ -39,6 +39,7 @@ class UserController {
         id,
         UserController.defaultResponse
       );
+      res.send(user);
     } catch (error) {
       res.status(404).send("User not found");
     }
