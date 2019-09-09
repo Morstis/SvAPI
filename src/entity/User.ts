@@ -32,7 +32,7 @@ export class User {
   email: string;
 
   @Column({ length: 50 })
-  @Length(4, 50)
+  @Length(0, 50)
   uid: string;
 
   @Column({ length: 100 })

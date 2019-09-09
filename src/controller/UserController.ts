@@ -55,7 +55,7 @@ class UserController {
     user.email = email;
     user.password = password;
     user.uid = uid;
-    user.role = "Schüler";
+    user.role = "SCHÜLER";
     user.uid = createUID();
     user.verified = false;
 
@@ -154,11 +154,15 @@ class UserController {
     try {
       await userRepository.save(user);
     } catch (e) {
-      res.status(409).send("email already in use");
+      res.status(409).send(e);
       return;
     }
-    //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
+
+    user = await userRepository.findOneOrFail(
+      id,
+      UserController.defaultResponse
+    );
+    res.send({ res: true, user: user });
   };
 
   static deleteUser = async (req: Request, res: Response) => {

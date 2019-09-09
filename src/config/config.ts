@@ -1,5 +1,6 @@
 export default {
   jwtSecret: "ItsseRd§Wd8?bYliBz$",
+  environment: "dev",
   mail: verificationInfo => {
     return (
       `
