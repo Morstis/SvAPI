@@ -20,7 +20,7 @@ createConnection()
 
     // Call midlewares
     app.use(helmet());
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({ limit: "10mb" }));
     // Cors config
     app.use(cors());
 

@@ -162,7 +162,7 @@ class UserController {
       id,
       UserController.defaultResponse
     );
-    res.send({ res: true, user: user });
+    res.send({ res: true, return: user });
   };
 
   static deleteUser = async (req: Request, res: Response) => {

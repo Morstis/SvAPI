@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ArticelController from "../controller/ArticelController";
+import WaypointController from "../controller/WaypointController";
 import { checkJwt } from "../middlewares/checkJwt";
 import { checkRole } from "../middlewares/checkRole";
 
@@ -8,9 +8,7 @@ const router = Router();
 router.post(
   "/",
   [checkJwt, checkRole(["SV", "ADMIN"])],
-  ArticelController.newArticel
+  WaypointController.newWaypoint
 );
-
-router.get("/", [checkJwt], ArticelController.getArticel);
-
+router.get("/:url", [checkJwt], WaypointController.getWaypoint)
 export default router;

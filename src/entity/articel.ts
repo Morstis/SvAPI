@@ -6,15 +6,15 @@ export class Articel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 20 })
+  @Column({ length: 50 })
   title: string;
 
-  @Column({ length: 200 })
+  @Column({ length: 10000 })
   text: string;
 
   @Column({ length: 20 })
   autor: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 200 })
   image: string;
 }

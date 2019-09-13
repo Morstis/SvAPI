@@ -1,6 +1,7 @@
 export default {
   jwtSecret: "ItsseRd§Wd8?bYliBz$",
-  environment: "dev",
+  environment: "prod",
+  imagePath: "/var/www/html/assets/img/",
   mail: verificationInfo => {
     return (
       `
