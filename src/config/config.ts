@@ -1,7 +1,7 @@
 export default {
-  jwtSecret: "ItsseRd§Wd8?bYliBz$",
-  environment: "prod",
-  imagePath: "/var/www/html/assets/img/",
+  jwtSecret: 'ItsseRd§Wd8?bYliBz$',
+  environment: 'dev',
+  imagePath: '/var/www/html/assets/img/',
   mail: verificationInfo => {
     return (
       `
@@ -17,7 +17,7 @@ export default {
                   h1 {
                       color: steelblue;
                   }
-      
+
                   a {
                       color: dodgerblue;
                       text-decoration: none;
@@ -32,15 +32,15 @@ export default {
                   a:active {
                       color: dodgerblue;
                   }
-            
+
                   p {
                       font-size: 150%;
                    }
               </style>
-            
+
               <h1>Danke f&uuml;r die Registrierung.</h1>
                   <br>
-              <p>Bitte klicke auf den Link unten, um dich zu verifizieren.</p> <br><br> 
+              <p>Bitte klicke auf den Link unten, um dich zu verifizieren.</p> <br><br>
               <a href="https://www.sv-hag.de/verify?uid=` +
       verificationInfo.uid +
       `&id=` +

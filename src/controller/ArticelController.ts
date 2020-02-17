@@ -1,9 +1,9 @@
-import { Response, Request } from "express";
-import { getRepository } from "typeorm";
-import { Articel } from "../entity/articel";
-import { validate } from "class-validator";
-import * as fs from "fs";
-import config from "../config/config";
+import { Response, Request } from 'express';
+import { getRepository } from 'typeorm';
+import { Articel } from '../entity/articel';
+import { validate } from 'class-validator';
+import * as fs from 'fs';
+import config from '../config/config';
 
 class ArticelController {
   static newArticel = async (req: Request, res: Response) => {
@@ -14,39 +14,36 @@ class ArticelController {
     if (errors.length > 0) {
       res.send({
         res: false,
-        error: "title already in use",
+        error: 'title already used',
         decription: errors
       });
       return;
     }
-
-    articel.image =
-      'url("../../../../assets/img/' +
-      articel.title.replace(/\s/g, "-") +
-      '.png")';
+    const imageFile = articel.image;
+    articel.image = 'url("../../../../assets/img/' + articel.title.replace(/\s/g, '-') + '.png")';
     try {
       await aR.save(articel);
     } catch (e) {
       res.send({
         res: false,
-        error: "title already in use",
+        error: 'title already in use',
         decription: e
       });
       return;
     }
     // Remove header
-    let base64Image = articel.image.split(";base64,").pop();
+    let base64Image = imageFile.split(';base64,').pop();
     fs.writeFile(
-      config.imagePath + articel.title.replace(/\s/g, "-") + ".png",
+      config.imagePath + articel.title.replace(/\s/g, '-') + '.png',
       base64Image,
-      { encoding: "base64" },
+      { encoding: 'base64' },
       err => {
         console.log(err);
 
         if (err) {
           res.send({
             res: false,
-            error: "can not write file",
+            error: 'can not write file',
             description: err
           });
           return;

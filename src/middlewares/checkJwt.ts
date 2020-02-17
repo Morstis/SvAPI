@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
-import config from "../config/config";
+import { Request, Response, NextFunction } from 'express';
+import * as jwt from 'jsonwebtoken';
+import config from '../config/config';
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head
-  const token = <string>req.headers["auth"];
+  const token = <string>req.headers['auth'];
   // console.log(token);
 
   let jwtPayload;
@@ -12,7 +12,7 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //Try to validate the token and get data
   try {
     jwtPayload = <any>jwt.verify(token, config.jwtSecret);
-    res.locals.jwtPayload = jwtPayload;
+    // res.locals.jwtPayload = jwtPayload;
   } catch (error) {
     //If token is not valid, respond with 401 (unauthorized)
     res.status(401).send();
@@ -32,10 +32,11 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
     },
     config.jwtSecret,
     {
-      expiresIn: "1h"
+      expiresIn: '1h'
     }
   );
-  res.setHeader("auth", newToken);
+
+  res.setHeader('auth', newToken);
 
   //Call the next middleware or controller
   next();

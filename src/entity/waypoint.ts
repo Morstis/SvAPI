@@ -1,7 +1,7 @@
-import { Entity, Unique, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, Unique, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-@Unique(["id"])
+@Unique(['id'])
 export class Waypoint {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,7 +12,7 @@ export class Waypoint {
   @Column({ length: 50 })
   linkTo: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 50 })
   shownTitle: string;
 
   @Column({ length: 200 })

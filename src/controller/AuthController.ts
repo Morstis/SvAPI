@@ -1,44 +1,87 @@
-import { Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
-import { getRepository, FindManyOptions } from "typeorm";
-import { validate } from "class-validator";
+import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
+import { getRepository, FindManyOptions } from 'typeorm';
+import { validate } from 'class-validator';
 
-import { User } from "../entity/User";
-import config from "../config/config";
+import { User } from '../entity/User';
+import config from '../config/config';
 
 class AuthController {
   static defaultResponse: FindManyOptions<User> = {
     select: [
-      "id",
-      "firstName",
-      "name",
-      "klasse",
-      "email",
-      "role",
-      "uid",
-      "verified"
+      'id',
+      'firstName',
+      'name',
+      'klasse',
+      'email',
+      'role',
+      'uid',
+      'verified'
     ]
   };
+
   static login = async (req: Request, res: Response) => {
-    //Check if email and password are set
+    let { email, password } = req.body;
+    const userRepository = getRepository(User);
+    let user: User;
+
+    try {
+      user = await userRepository.findOneOrFail({ where: { email } });
+    } catch (error) {
+      res.send({ res: false, error: 'user not found' });
+    }
+    if (user.verified === false) {
+      console.log('not verified');
+      res.send({ res: false, error: 'user is not verified' });
+    }
+
+    if (!user.checkIfUnencryptedPasswordIsValid(password)) {
+      res.send({ res: false, error: 'wrong password' });
+      return;
+    }
+    //Sing JWT, valid for 1 hour
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        firstName: user.firstName,
+        name: user.name,
+        klasse: user.klasse,
+        email: user.email,
+        role: user.role
+      },
+      config.jwtSecret,
+      { expiresIn: '1h' }
+    );
+
+    // Send the jwt in the response
+    res.send({ res: true, token: token });
+  };
+
+  // ####################### OLD LOGIN #######################################
+  static loginOld = async (req: Request, res: Response) => {
+    console.log('there');
+
+    // Check if email and password are set
     let { email, password } = req.body;
 
     if (!password) {
       const userRepository = getRepository(User);
       let user: User;
+
       try {
         user = await userRepository.findOneOrFail({ where: { email } });
       } catch (error) {
-        res.send({ res: false, error: "user not found" });
+        res.send({ res: false, error: 'user not found' });
       }
       if (user.verified === false) {
-        console.log("not verified");
-        res.send({ res: false, error: "user is not verified" });
+        console.log('not verified');
+        res.send({ res: false, error: 'user is not verified' });
       }
+
       res.send({ res: true });
     }
 
-    //Get user from database
+    // Get user from database
     const userRepository = getRepository(User);
     let user: User;
     try {
@@ -47,13 +90,13 @@ class AuthController {
       res.send({
         res: false,
         description: error,
-        error: "impossible case: user is wrong at the 2nd attempt"
+        error: 'impossible case: user is wrong at the 2nd attempt'
       });
     }
 
-    //Check if encrypted password match
+    // Check if encrypted password match
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      res.send({ res: false, error: "wrong password" });
+      res.send({ res: false, error: 'wrong password' });
       return;
     }
 
@@ -63,23 +106,22 @@ class AuthController {
         userId: user.id,
         firstName: user.firstName,
         name: user.name,
-        class: user.klasse,
+        klasse: user.klasse,
         email: user.email,
         role: user.role
       },
       config.jwtSecret,
-      { expiresIn: "1h" }
+      { expiresIn: '1h' }
     );
 
-    //Send the jwt in the response
-    res.setHeader("auth", token);
+    // Send the jwt in the response
     res.send({ res: true, token: token });
   };
 
   static verify = async (req: Request, res: Response) => {
     let { uid, id } = req.body;
     if (!(uid && id)) {
-      res.send({ res: false, error: "params not valid" });
+      res.send({ res: false, error: 'params not valid' });
     }
 
     const userRepository = getRepository(User);
@@ -90,14 +132,14 @@ class AuthController {
         AuthController.defaultResponse
       );
     } catch (error) {
-      res.send({ res: false, error: "User not found" });
+      res.send({ res: false, error: 'User not found' });
     }
 
     if (user.uid !== uid) {
-      res.send({ res: false, error: "uid not matching" });
+      res.send({ res: false, error: 'uid not matching' });
     }
     user.verified = true;
-    user.uid = "";
+    user.uid = '';
     userRepository.save(user);
 
     res.send({ res: true });

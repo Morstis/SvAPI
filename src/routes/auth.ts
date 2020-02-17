@@ -1,15 +1,17 @@
-import { Router } from "express";
-import AuthController from "../controller/AuthController";
-import { checkJwt } from "../middlewares/checkJwt";
+import { Router } from 'express';
+import AuthController from '../controller/AuthController';
+import { checkJwt } from '../middlewares/checkJwt';
 
 const router = Router();
 //Login route
-router.post("/login", AuthController.login);
+router.post('/login', AuthController.login);
+
+router.post('/loginOld', AuthController.loginOld);
 
 //Change my password
-router.post("/change-password", [checkJwt], AuthController.changePassword);
+router.post('/change-password', [checkJwt], AuthController.changePassword);
 
 // verify user
-router.post("/verify", AuthController.verify);
+router.post('/verify', AuthController.verify);
 
 export default router;
