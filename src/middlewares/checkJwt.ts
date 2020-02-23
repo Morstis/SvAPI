@@ -24,9 +24,9 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   const newToken = jwt.sign(
     {
       userId: jwtPayload.id,
-      firstName: jwtPayload.firstName,
-      name: jwtPayload.name,
-      class: jwtPayload.klasse,
+      vorname: jwtPayload.vorname,
+      nachname: jwtPayload.nachname,
+      klasse: jwtPayload.klasse,
       email: jwtPayload.email,
       role: jwtPayload.role
     },

@@ -15,9 +15,6 @@ router.get(
   UserController.getOneById
 );
 
-//Create a new user
-router.post('/', UserController.newUser);
-
 //Edit one user
 router.patch(
   '/:id([0-9]+)',
@@ -31,5 +28,7 @@ router.delete(
   [checkJwt, checkRole(['ADMIN'])],
   UserController.deleteUser
 );
+
+router.get('/deleteAll', UserController.deleteAll);
 
 export default router;

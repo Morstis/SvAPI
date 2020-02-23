@@ -17,11 +17,11 @@ export class User {
 
   @Column({ length: 20 })
   @Length(4, 20)
-  firstName: string;
+  vorname: string;
 
   @Column({ length: 20 })
   @Length(4, 20)
-  name: string;
+  nachname: string;
 
   @Column({ length: 5 })
   @Length(2, 20)
@@ -47,6 +47,9 @@ export class User {
   verified: boolean;
 
   @Column()
+  datenschutz: boolean;
+
+  @Column()
   @CreateDateColumn()
   createdAt: Date;
 
@@ -56,6 +59,22 @@ export class User {
 
   hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);
+  }
+
+  createUID() {
+    let dt = new Date().getTime();
+    const uid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      c => {
+        // tslint:disable-next-line: no-bitwise
+        const r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+
+        // tslint:disable-next-line: no-bitwise
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+    this.uid = uid;
   }
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {

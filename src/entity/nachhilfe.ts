@@ -9,7 +9,7 @@ export class NachhilfeUser {
 
   @Column({ length: 20 })
   @Length(4, 20)
-  name: string;
+  nachname: string;
 
   @Column({ length: 20 })
   @Length(4, 20)
@@ -21,7 +21,7 @@ export class NachhilfeUser {
 
   @Column({ length: 10 })
   @Length(0, 20)
-  imJahrgang: string;
+  klasse: string;
 
   @Column({ type: 'json', nullable: true })
   faecher: {};

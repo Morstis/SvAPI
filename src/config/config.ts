@@ -2,9 +2,9 @@ export default {
   jwtSecret: 'ItsseRd§Wd8?bYliBz$',
   environment: 'dev',
   imagePath: '/var/www/html/assets/img/',
+  // prettier-ignore
   mail: verificationInfo => {
-    return (
-      `
+    return `
       <html>
           <head>
             <meta charset='UTF-8' />
@@ -41,13 +41,8 @@ export default {
               <h1>Danke f&uuml;r die Registrierung.</h1>
                   <br>
               <p>Bitte klicke auf den Link unten, um dich zu verifizieren.</p> <br><br>
-              <a href="https://www.sv-hag.de/verify?uid=` +
-      verificationInfo.uid +
-      `&id=` +
-      verificationInfo.id +
-      `">Verifizieren</a>
+              <a href="${'http://loaclhost:4200'}/verify?uid=${verificationInfo.uid}&email=${verificationInfo.email}">Verifizieren</a>
           </body>
-      </html>`
-    );
+      </html>`;
   }
 };

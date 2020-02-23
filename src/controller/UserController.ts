@@ -1,21 +1,20 @@
-import { Request, Response } from "express";
-import { getRepository, FindManyOptions } from "typeorm";
-import { validate } from "class-validator";
-import * as nodeMailer from "nodemailer";
-import { User } from "../entity/User";
-import config from "../config/config";
+import { Request, Response } from 'express';
+import { getRepository, FindManyOptions } from 'typeorm';
+import { validate } from 'class-validator';
+import { User } from '../entity/User';
+import config from '../config/config';
 
 class UserController {
   static defaultResponse: FindManyOptions<User> = {
     select: [
-      "id",
-      "firstName",
-      "name",
-      "klasse",
-      "email",
-      "role",
-      "uid",
-      "verified"
+      'id',
+      'vorname',
+      'nachname',
+      'klasse',
+      'email',
+      'role',
+      'uid',
+      'verified'
     ] //We dont want to send the passwords on response
   };
 
@@ -41,88 +40,9 @@ class UserController {
       );
       res.send(user);
     } catch (error) {
-      res.status(404).send("User not found");
+      res.status(404).send('User not found');
     }
   };
-
-  static newUser = async (req: Request, res: Response) => {
-    //Get parameters from the body
-    let { firstName, name, klasse, email, password, uid } = req.body;
-    let user = new User();
-    user.firstName = firstName;
-    user.name = name;
-    user.klasse = klasse;
-    user.email = email;
-    user.password = password;
-    user.uid = uid;
-    user.role = "SCHÜLER";
-    user.uid = createUID();
-    user.verified = false;
-
-    function createUID() {
-      let dt = new Date().getTime();
-      const uuid: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-        /[xy]/g,
-        c => {
-          // tslint:disable-next-line: no-bitwise
-          const r = (dt + Math.random() * 16) % 16 | 0;
-          dt = Math.floor(dt / 16);
-
-          // tslint:disable-next-line: no-bitwise
-          return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-        }
-      );
-      return uuid;
-    }
-
-    //Validade if the parameters are ok
-    const errors = await validate(user);
-    if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
-    }
-
-    //Hash the password, to securely store on DB
-    user.hashPassword();
-
-    //Try to save. If fails, the email is already in use
-    const userRepository = getRepository(User);
-    try {
-      await userRepository.save(user);
-    } catch (e) {
-      res.send({ res: false, error: "email already in use" });
-      return;
-    }
-
-    //send email
-    let transporter = nodeMailer.createTransport({
-      host: "hag-iserv.de",
-      port: 25,
-      auth: {
-        // should be replaced with real sender's account
-        user: "l.wiese",
-        pass: "Morstis_nex"
-      }
-    });
-
-    let mailOptions = {
-      // should be replaced with real recipient's account
-      from: "Sv-Website <sv@hag-iserv.de>",
-      to: user.email,
-      subject: "Verifiziere deine Email",
-      html: config.mail(user)
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        res.send({ res: false, error: "email isn't existing" });
-        return console.log("Mail error " + error);
-      }
-      console.log("Message %s sent: %s", info.messageId, info.response);
-      //If all ok, send 201 response
-      res.status(201).send({ res: true });
-    });
-  };
-
   static editUser = async (req: Request, res: Response) => {
     //Get the ID from the url
     const id = req.params.id;
@@ -137,7 +57,7 @@ class UserController {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
       //If not found, send a 404 response
-      res.status(404).send("User not found");
+      res.status(404).send('User not found');
       return;
     }
 
@@ -174,7 +94,7 @@ class UserController {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send("User not found");
+      res.status(404).send('User not found');
       return;
     }
     userRepository.delete(id);
