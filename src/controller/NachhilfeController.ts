@@ -9,6 +9,8 @@ class NachhilfeController {
     const nR = getRepository(NachhilfeUser);
     // get data
     let nachhilfeUser: NachhilfeUser = req.body;
+    delete nachhilfeUser.id;
+    console.log(nachhilfeUser);
 
     // validate user
     const e = await validate(nachhilfeUser);
@@ -24,6 +26,7 @@ class NachhilfeController {
       res.status(400).send({ error: 'error: ' + e });
     }
     // if no errors are thrown send 201 (user created) + return of user for the push based systems
+
     res.status(201).send(nachhilfeUser);
   };
 

@@ -41,7 +41,7 @@ export default {
               <h1>Danke f&uuml;r die Registrierung.</h1>
                   <br>
               <p>Bitte klicke auf den Link unten, um dich zu verifizieren.</p> <br><br>
-              <a href="${'http://loaclhost:4200'}/verify?uid=${verificationInfo.uid}&email=${verificationInfo.email}">Verifizieren</a>
+              <a href="${'http://localhost:4200'}/verify?uid=${verificationInfo.uid}&email=${verificationInfo.email}">Verifizieren</a>
           </body>
       </html>`;
   }

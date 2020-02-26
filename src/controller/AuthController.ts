@@ -9,16 +9,7 @@ import config from '../config/config';
 
 class AuthController {
   static defaultResponse: FindManyOptions<User> = {
-    select: [
-      'id',
-      'vorname',
-      'nachname',
-      'klasse',
-      'email',
-      'role',
-      'uid',
-      'verified'
-    ]
+    select: ['id', 'vorname', 'nachname', 'klasse', 'email', 'role', 'verified']
   };
 
   static login = async (req: Request, res: Response) => {
@@ -42,23 +33,20 @@ class AuthController {
       res.send({ res: false, error: 'wrong password' });
       return;
     }
-    //Sing JWT, valid for 1 hour
 
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        vorname: user.vorname,
-        nachname: user.nachname,
-        klasse: user.klasse,
-        email: user.email,
-        role: user.role
-      },
-      config.jwtSecret,
-      { expiresIn: '1h' }
-    );
+    try {
+      user = await userRepository.findOneOrFail(
+        user.id,
+        AuthController.defaultResponse
+      );
+    } catch (e) {
+      res.send({ res: false, error: '2nd db request failed', message: e });
+    }
+    // Sing JWT, valid for 1 hour
+    const token = jwt.sign({}, config.jwtSecret, { expiresIn: '1h' });
 
     // Send the jwt in the response
-    res.send({ res: true, token: token });
+    res.send({ res: true, token: token, return: user });
   };
 
   static newUser = async (req: Request, res: Response) => {

@@ -7,11 +7,9 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   const token = <string>req.headers['auth'];
   // console.log(token);
 
-  let jwtPayload;
-
   //Try to validate the token and get data
   try {
-    jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+    jwt.verify(token, config.jwtSecret);
     // res.locals.jwtPayload = jwtPayload;
   } catch (error) {
     //If token is not valid, respond with 401 (unauthorized)
@@ -21,20 +19,9 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
 
   //The token is valid for 1 hour
   //We want to send a new token on every request
-  const newToken = jwt.sign(
-    {
-      userId: jwtPayload.id,
-      vorname: jwtPayload.vorname,
-      nachname: jwtPayload.nachname,
-      klasse: jwtPayload.klasse,
-      email: jwtPayload.email,
-      role: jwtPayload.role
-    },
-    config.jwtSecret,
-    {
-      expiresIn: '1h'
-    }
-  );
+  const newToken = jwt.sign({}, config.jwtSecret, {
+    expiresIn: '1h'
+  });
 
   res.setHeader('auth', newToken);
 
